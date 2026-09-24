@@ -1,0 +1,69 @@
+# --- Environment / secrets ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# --- Node.js / JavaScript / TypeScript ---
+node_modules/
+.next/
+out/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+.eslintcache
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+.turbo/
+.vercel/
+next-env.d.ts
+
+# --- Rust ---
+target/
+**/*.rs.bk
+
+# --- Go ---
+/bin/
+*.test
+*.out
+go.work.sum
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# --- PHP ---
+vendor/
+.php-cs-fixer.cache
+.phpunit.cache/
+.phpunit.result.cache
+
+# --- Claude Code (personal, non-shared settings) ---
+.claude/settings.local.json
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Editors ---
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.swp
+*.swo
+*~
