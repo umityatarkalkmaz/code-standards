@@ -97,7 +97,8 @@ export default defineConfig(
 
 - **ES Modules only** in new code: `import`/`export`, `"type": "module"`. No `require`,
   `module.exports` or `__dirname` (use `import.meta.dirname` / `import.meta.filename`).
-  `.cjs` only for a third-party config that cannot load ESM.
+  `.cjs` only for a third-party config that cannot load ESM. Expo / React Native apps keep ESM
+  syntax in source but do not set `"type": "module"`; see [react-native.md](react-native.md).
 - Use the `node:` prefix for built-ins: `import { readFile } from "node:fs/promises";`.
 - Node service / library:
 
