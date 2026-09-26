@@ -29,7 +29,7 @@ everything is project-level: nothing depends on `~/.claude`.
    - picks tools by file extension, preferring project-local binaries (`node_modules/.bin`,
      `vendor/bin`, `.venv/bin`) over `PATH`;
    - runs formatters in place, then linters; package-level analysers (`cargo clippy`,
-     `golangci-lint run`, `go vet`, `phpstan`) run under a 90 s timeout.
+     `golangci-lint run`, `go vet`, `phpstan`, `dart`/`flutter analyze`) run under a 90 s timeout.
 3. **Feedback**:
    - clean: exit 0, silent;
    - lint findings: exit 2, findings on stderr (first 60 lines) are shown to Claude, which
@@ -40,11 +40,12 @@ everything is project-level: nothing depends on `~/.claude`.
 | Extension | Formatter | Linters |
 | --- | --- | --- |
 | `.php` | php-cs-fixer (project config or `@PER-CS`) | `php -l`, phpstan (if `phpstan.neon*` exists) |
-| `.js .mjs .cjs .jsx .ts .mts .cts .tsx` | prettier | eslint (if `eslint.config.*` exists, project-local only) |
+| `.js .mjs .cjs .jsx .ts .mts .cts .tsx` (incl. React Native / Expo) | prettier | eslint `--max-warnings=0` (if `eslint.config.*` exists, project-local only) |
 | `.css` | prettier | none |
 | `.rs` | rustfmt (edition from `Cargo.toml`) | `cargo clippy -- -D warnings` |
 | `.go` | `golangci-lint fmt` (if configured) or gofmt | `go vet`, golangci-lint (if `.golangci.*` exists) |
 | `.py .pyi` | `ruff format` | `ruff check` |
+| `.dart` | `dart format` | `flutter analyze` (Flutter packages) or `dart analyze --fatal-infos`, after `pub get` |
 | `.sh .bash` | none | shellcheck |
 
 ## Limits

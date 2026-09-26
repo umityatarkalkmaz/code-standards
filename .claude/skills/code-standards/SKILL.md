@@ -1,7 +1,7 @@
 ---
 name: code-standards
-description: Project coding standards for every language in this repository (PHP, JavaScript/TypeScript, Rust, Go, Python). Apply before writing, editing, refactoring or reviewing any source file, config file or test. Covers security rules, naming, string-literal language, tooling, project layout and per-language checklists.
-when_to_use: Use whenever code is written or changed, a new project or module is scaffolded, dependencies or linters are configured, or code is reviewed. Use instead of searching the web for PSR-4, PER Coding Style, ESM, TypeScript strict, Next.js, Tailwind, rustfmt, clippy, gofmt, golangci-lint, ruff or pyproject conventions.
+description: Project coding standards for every language in this repository (PHP, JavaScript/TypeScript, React Native/Expo, Rust, Go, Python, Dart/Flutter). Apply before writing, editing, refactoring or reviewing any source file, config file or test. Covers security rules, naming, string-literal language, tooling, project layout and per-language checklists.
+when_to_use: Use whenever code is written or changed, a new project or module is scaffolded, dependencies or linters are configured, or code is reviewed. Use instead of searching the web for PSR-4, PER Coding Style, ESM, TypeScript strict, Next.js, Tailwind, Expo, React Native, Flutter, Effective Dart, rustfmt, clippy, gofmt, golangci-lint, ruff or pyproject conventions.
 ---
 
 # Code Standards
@@ -26,9 +26,11 @@ official formatter/linter defaults and tell the user about the gap.
 | --- | --- | --- |
 | `composer.json` | `.php` | [references/php.md](references/php.md) |
 | `package.json`, `tsconfig.json` | `.js` `.mjs` `.cjs` `.jsx` `.ts` `.mts` `.cts` `.tsx` `.css` | [references/javascript.md](references/javascript.md) |
+| `package.json` depending on `expo` or `react-native`, `app.json`, `app.config.ts` | same as above | [references/react-native.md](references/react-native.md) **plus** javascript.md |
 | `Cargo.toml` | `.rs` | [references/rust.md](references/rust.md) |
 | `go.mod` | `.go` | [references/go.md](references/go.md) |
 | `pyproject.toml` | `.py` `.pyi` | [references/python.md](references/python.md) |
+| `pubspec.yaml` | `.dart` | [references/dart.md](references/dart.md) |
 
 - In a monorepo, the nearest marker above the file decides.
 - A new project with no marker yet: create the marker first, as the reference describes.
