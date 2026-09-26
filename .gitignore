@@ -4,6 +4,12 @@
 !.env.example
 *.pem
 *.key
+*.jks
+*.keystore
+!debug.keystore
+*.p8
+*.p12
+*.mobileprovision
 
 # --- Node.js / JavaScript / TypeScript ---
 node_modules/
@@ -50,6 +56,25 @@ vendor/
 .php-cs-fixer.cache
 .phpunit.cache/
 .phpunit.result.cache
+
+# --- React Native / Expo ---
+.expo/
+web-build/
+expo-env.d.ts
+*.ipa
+*.apk
+*.aab
+
+# --- Dart / Flutter ---
+.dart_tool/
+.flutter-plugins-dependencies
+.fvm/flutter_sdk
+**/android/local.properties
+**/android/.gradle/
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/Pods/
+*.iml
 
 # --- Claude Code (personal, non-shared settings) ---
 .claude/settings.local.json
