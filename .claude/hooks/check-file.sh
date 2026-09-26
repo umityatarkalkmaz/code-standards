@@ -345,6 +345,37 @@ check_python() {
   fi
 }
 
+check_dart() {
+  local pub_dir dart flutter
+  pub_dir="$(find_up pubspec.yaml "$file_dir" || true)"
+
+  if dart="$(command -v dart 2>/dev/null)"; then
+    run_step format "dart format" "$file_dir" "$dart" format --output=write "$file"
+  else
+    warn_missing_tool "dart" "formatting and analysis skipped (install the Flutter or Dart SDK)"
+    return 0
+  fi
+
+  [[ -n "$pub_dir" ]] || return 0
+  # Analysis without resolved packages only reports unresolved imports.
+  if [[ ! -e "${pub_dir}/.dart_tool/package_config.json" ]]; then
+    if should_warn_once "dart-pub-get"; then
+      add_warning "dart analysis skipped; run 'flutter pub get' or 'dart pub get' first"
+    fi
+    return 0
+  fi
+
+  if grep -qE '^[[:space:]]+sdk:[[:space:]]*flutter[[:space:]]*$' "${pub_dir}/pubspec.yaml"; then
+    if flutter="$(command -v flutter 2>/dev/null)"; then
+      run_step heavy "flutter analyze" "$pub_dir" "$flutter" analyze --no-pub "$file"
+    else
+      warn_missing_tool "flutter" "Flutter analysis skipped (install the Flutter SDK)"
+    fi
+  else
+    run_step heavy "dart analyze" "$pub_dir" "$dart" analyze --fatal-infos "$file"
+  fi
+}
+
 check_shell() {
   local shellcheck
   if shellcheck="$(command -v shellcheck 2>/dev/null)"; then
@@ -437,6 +468,7 @@ main() {
     *.rs) check_rust ;;
     *.go) check_go ;;
     *.py | *.pyi) check_python ;;
+    *.dart) check_dart ;;
     *.sh | *.bash) check_shell ;;
     *) return 0 ;;
   esac
