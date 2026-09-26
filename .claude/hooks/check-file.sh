@@ -265,7 +265,7 @@ check_javascript() {
     # Only a project-local ESLint can load the project's plugins and shared configs.
     if eslint="$(resolve_tool eslint node_modules/.bin "$config_dir" "$package_dir" "$project_root")" \
       && [[ "$eslint" == "$project_root"/* ]]; then
-      run_step lint "eslint" "$config_dir" "$eslint" --no-warn-ignored "$file"
+      run_step lint "eslint" "$config_dir" "$eslint" --no-warn-ignored --max-warnings=0 "$file"
     else
       warn_missing_tool "eslint" "lint skipped; install project dependencies (npm ci)"
     fi
