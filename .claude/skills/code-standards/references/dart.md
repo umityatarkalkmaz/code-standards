@@ -1,11 +1,11 @@
 # Dart / Flutter Standards
 
-Verified: 2026-09-26
+Verified: 2026-10-12
 
 | Item | Version | Source |
 | --- | --- | --- |
-| Flutter | 3.47.5 stable | https://docs.flutter.dev/release/archive |
-| Dart | 3.13.4 (bundled with Flutter 3.47) | https://dart.dev/get-dart |
+| Flutter | 3.47.7 stable | https://docs.flutter.dev/release/archive |
+| Dart | 3.13.5 (bundled with Flutter 3.47.7) | https://dart.dev/get-dart |
 | Effective Dart | current | https://dart.dev/effective-dart |
 | `dart format` | bundled (tall style, language-version aware) | https://dart.dev/tools/dart-format |
 | flutter_lints / lints | 6.0.0 / 6.1.0 | https://pub.dev/packages/flutter_lints |
@@ -15,7 +15,7 @@ Verified: 2026-09-26
 
 ## Tooling
 
-- Pin the Flutter SDK per project with FVM (`.fvmrc`, `fvm use 3.47.5`) or document the
+- Pin the Flutter SDK per project with FVM (`.fvmrc`, `fvm use 3.47.7`) or document the
   version in `pubspec.yaml` `environment`. Do not rely on a global SDK version.
 
 ```yaml

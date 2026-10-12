@@ -1,15 +1,15 @@
 # PHP Standards
 
-Verified: 2026-09-24
+Verified: 2026-10-12
 
 | Item | Version | Source |
 | --- | --- | --- |
 | PHP | 8.5 (current stable branch) | https://www.php.net/supported-versions.php |
 | PER Coding Style | 3.1 (extends and replaces PSR-12, requires PSR-1) | https://www.php-fig.org/per/coding-style/ |
 | PSR-4 Autoloading | final | https://www.php-fig.org/psr/psr-4/ |
-| PHP-CS-Fixer | 3.95 (rule set `@PER-CS` tracks the latest PER-CS) | https://cs.symfony.com/doc/ruleSets/ |
-| PHPStan | 2.2 (levels 0–10, `max` = highest) | https://phpstan.org/user-guide/rule-levels |
-| PHPUnit | 13.3 | https://phpunit.de |
+| PHP-CS-Fixer | 3.95.27 (`@PER-CS` currently = `@PER-CS3x0`; no 3.1 set yet) | https://cs.symfony.com/doc/ruleSets/ |
+| PHPStan | 2.3 (levels 0–10, `max` = highest) | https://phpstan.org/user-guide/rule-levels |
+| PHPUnit | 13.4 | https://phpunit.de |
 | Composer | 2.x | https://getcomposer.org/doc/ |
 
 ## Tooling
@@ -41,6 +41,20 @@ return (new PhpCsFixer\Config())
     ->setFinder($finder);
 ```
 
+- **PER-CS 3.1 additions not yet automated**: `@PER-CS` in PHP-CS-Fixer 3.95 still maps to
+  PER-CS 3.0. Apply the 3.1 rules by hand
+  ([migration-3.1](https://github.com/php-fig/per-coding-style/blob/master/migration-3.1.md)):
+  - `clone` is always called with parentheses: `clone($a)`.
+  - `case` bodies are never wrapped in `{}`; every non-empty `case` ends with `break`,
+    `return` or similar, including the last one; multi-line `case` conditions are wrapped in
+    parentheses (`case (` … `):`).
+  - The pipe operator `|>` has a space on both sides; in multi-line chains each line starts
+    with `|>` and is indented.
+  - Empty closures are written `function () {}` on one line; prefer `fn() => null`.
+  - Attributes on anonymous classes start on the line after `new`, indented once.
+  - Non-public enum constants are `private`, not `protected`.
+  - The opening bracket of a multi-line array never sits on its own line, in any context.
+
 - **Static analysis**: PHPStan. New projects start at `level: max`. Legacy code starts at the
   highest level that passes and uses a baseline (`--generate-baseline`) to ratchet up.
   `phpstan.neon.dist`:
@@ -52,6 +66,9 @@ parameters:
         - src
         - tests
 ```
+
+  Every listed path must exist, or a full `phpstan analyse` fails; add `tests` once the
+  directory is created.
 
 - **Composer conventions**:
   - `composer.json` declares `"require": {"php": "^8.5"}` (or the project's minimum) and

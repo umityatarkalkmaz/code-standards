@@ -1,13 +1,13 @@
 # Python Standards
 
-Verified: 2026-09-24
+Verified: 2026-10-12
 
 | Item | Version | Source |
 | --- | --- | --- |
 | Python | 3.14 | https://www.python.org/downloads/ |
-| ruff (lint + format) | 0.16.9 | https://docs.astral.sh/ruff/ |
-| uv (env + dependencies) | 0.12 | https://docs.astral.sh/uv/ |
-| mypy | 2.3 | https://mypy.readthedocs.io |
+| ruff (lint + format) | 0.17.0 | https://docs.astral.sh/ruff/ |
+| uv (env + dependencies) | 0.13 | https://docs.astral.sh/uv/ |
+| mypy | 2.4 | https://mypy.readthedocs.io |
 | pytest | 9.1 | https://docs.pytest.org |
 | `pyproject.toml` metadata | PEP 621 / packaging guide | https://packaging.python.org/en/latest/guides/writing-pyproject-toml/ |
 
