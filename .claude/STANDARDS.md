@@ -14,6 +14,7 @@ everything is project-level: nothing depends on `~/.claude`.
 | `.claude/skills/code-standards/references/<lang>.md` | Per-language standards, loaded on demand. |
 | `.claude/hooks/check-file.sh` | PostToolUse hook: formats and lints each written file. |
 | `.claude/hooks/session-start.sh` | SessionStart hook (web only): installs project dependencies from lockfiles. |
+| `.claude/hooks/tests/test-hooks.sh` | Regression tests for both hooks (`bash .claude/hooks/tests/test-hooks.sh`). |
 | `.claude/settings.json` | Registers both hooks. Contains no permission changes. |
 
 ## How It Works
@@ -92,7 +93,9 @@ Three changes, in this order:
    `warn_missing_tool` when a tool is absent) and one line in the extension `case` in `main`.
    Pass absolute file paths only; never build command strings.
 
-Then update the extension table above.
+Then update the extension table above and add a `test_<lang>()` case to
+`.claude/hooks/tests/test-hooks.sh` (it reports SKIP when the tool is not installed).
+Run the suite after any hook change: `bash .claude/hooks/tests/test-hooks.sh`.
 
 ## Update the Standards
 
