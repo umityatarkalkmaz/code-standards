@@ -13,7 +13,8 @@ everything is project-level: nothing depends on `~/.claude`.
 | `.claude/skills/code-standards/SKILL.md` | Core language-agnostic rules and a routing table. |
 | `.claude/skills/code-standards/references/<lang>.md` | Per-language standards, loaded on demand. |
 | `.claude/hooks/check-file.sh` | PostToolUse hook: formats and lints each written file. |
-| `.claude/settings.json` | Registers the hook. Contains no permission changes. |
+| `.claude/hooks/session-start.sh` | SessionStart hook (web only): installs project dependencies from lockfiles. |
+| `.claude/settings.json` | Registers both hooks. Contains no permission changes. |
 
 ## How It Works
 
@@ -30,7 +31,14 @@ everything is project-level: nothing depends on `~/.claude`.
      `vendor/bin`, `.venv/bin`) over `PATH`;
    - runs formatters in place, then linters; package-level analysers (`cargo clippy`,
      `golangci-lint run`, `go vet`, `phpstan`, `dart`/`flutter analyze`) run under a 90 s timeout.
-3. **Feedback**:
+3. **Session start (web only)**: when `CLAUDE_CODE_REMOTE=true`, `session-start.sh` finds
+   manifests up to three levels deep and installs dependencies project-scoped, only where a
+   lockfile is committed: `npm install` / `pnpm install --frozen-lockfile` /
+   `yarn install --immutable`, `composer install`, `uv sync --frozen`, `flutter`/`dart pub get`,
+   `go mod download`, `cargo fetch --locked`. It runs synchronously (each step capped at
+   240 s) and reports installed, failed and missing toolchains to Claude as session context.
+   Locally it does nothing.
+4. **Feedback**:
    - clean: exit 0, silent;
    - lint findings: exit 2, findings on stderr (first 60 lines) are shown to Claude, which
      fixes them;
@@ -55,9 +63,11 @@ everything is project-level: nothing depends on `~/.claude`.
 - **Bash edits are not checked**: the hook fires on the `Edit` and `Write` tools only. A
   file changed through `sed`, a heredoc or a code generator is not verified; the skill tells
   Claude to use Edit/Write for file changes.
-- **Web sandbox tools**: many tools are missing in a fresh cloud sandbox. The hook then only
-  warns; Claude applies the reference Checklist manually. Installing project dev
-  dependencies (`npm ci`, `uv sync`, `composer install`) enables the project-local tools.
+- **Web sandbox tools**: `session-start.sh` installs project dependencies, which covers tools
+  declared as dev dependencies (prettier, eslint, ruff, php-cs-fixer, phpstan). Language
+  toolchains themselves (PHP, Go, Rust, Flutter/Dart) must exist in the environment image or
+  setup script; when one is missing, the hooks only warn and Claude applies the reference
+  Checklist manually. Synchronous install delays the first response of a session.
 - **Project-local binaries run as project code**: the hook executes tools from
   `node_modules/.bin`, `vendor/bin` and `.venv/bin`. Only use it in repositories you trust,
   the same as running `npm test`.
