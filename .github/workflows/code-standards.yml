@@ -1,0 +1,83 @@
+name: Code Standards
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: code-standards-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  hooks:
+    name: Hook tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Lint hook scripts
+        run: shellcheck -S style .claude/hooks/*.sh .claude/hooks/tests/*.sh
+
+      - name: Run hook tests
+        run: bash .claude/hooks/tests/test-hooks.sh
+
+  standards:
+    name: Standards check on changed files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Detect project languages
+        id: detect
+        run: |
+          has() { git ls-files -- "$@" | grep -q .; }
+          has 'package.json' '*/package.json' && echo "node=true" >> "$GITHUB_OUTPUT"
+          has 'pyproject.toml' '*/pyproject.toml' && echo "python=true" >> "$GITHUB_OUTPUT"
+          has 'composer.json' '*/composer.json' && echo "php=true" >> "$GITHUB_OUTPUT"
+          has 'pubspec.yaml' '*/pubspec.yaml' && echo "dart=true" >> "$GITHUB_OUTPUT"
+          gomod="$(git ls-files -- 'go.mod' '*/go.mod' | head -n 1)"
+          [ -n "$gomod" ] && echo "gomod=$gomod" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        if: steps.detect.outputs.node == 'true'
+        with:
+          node-version: lts/*
+
+      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        if: steps.detect.outputs.python == 'true'
+
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        if: steps.detect.outputs.php == 'true'
+        with:
+          php-version: '8.5'
+          tools: composer
+
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        if: steps.detect.outputs.gomod != ''
+        with:
+          go-version-file: ${{ steps.detect.outputs.gomod }}
+
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        if: steps.detect.outputs.dart == 'true'
+        with:
+          channel: stable
+
+      - name: Install project dependencies
+        env:
+          CLAUDE_CODE_REMOTE: 'true'
+        run: CLAUDE_PROJECT_DIR="$GITHUB_WORKSPACE" bash .claude/hooks/session-start.sh
+
+      - name: Check changed files
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: bash .claude/hooks/ci-check.sh "$BASE_SHA"
