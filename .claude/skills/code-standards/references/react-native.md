@@ -1,6 +1,6 @@
 # React Native / Expo Standards
 
-Verified: 2026-09-26
+Verified: 2026-10-12
 
 This file adds mobile-specific rules on top of [javascript.md](javascript.md). TypeScript
 strict mode, naming, ESLint flat config and general JS security rules from javascript.md
@@ -14,7 +14,7 @@ still apply; this file overrides it only where stated.
 | Expo Router | 57.0.x | https://docs.expo.dev/router/introduction/ |
 | eslint-config-expo | 57.0.x (flat config at `eslint-config-expo/flat.js`) | https://docs.expo.dev/guides/using-eslint/ |
 | expo-secure-store | 57.0.x | https://docs.expo.dev/versions/latest/sdk/securestore/ |
-| jest-expo + @testing-library/react-native | 57.0.x + 14.0 | https://docs.expo.dev/develop/unit-testing/ |
+| jest-expo + @testing-library/react-native | 57.0.x + 14.1 | https://docs.expo.dev/develop/unit-testing/ |
 | EAS CLI | 20.x | https://docs.expo.dev/eas/ |
 
 > **Version rule**: install every Expo/React Native package with `npx expo install <pkg>`, never

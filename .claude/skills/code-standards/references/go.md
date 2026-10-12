@@ -1,10 +1,10 @@
 # Go Standards
 
-Verified: 2026-09-24
+Verified: 2026-10-12
 
 | Item | Version | Source |
 | --- | --- | --- |
-| Go | 1.27 | https://go.dev/doc/devel/release |
+| Go | 1.27 (1.27.2) | https://go.dev/doc/devel/release |
 | gofmt / goimports | bundled / `golang.org/x/tools` | https://pkg.go.dev/cmd/gofmt |
 | golangci-lint | v2.14 (config `version: "2"`) | https://golangci-lint.run/docs/configuration/ |
 | Module layout | official guide | https://go.dev/doc/modules/layout |

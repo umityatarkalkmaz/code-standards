@@ -1,20 +1,20 @@
 # JavaScript / TypeScript Standards
 
-Verified: 2026-09-24
+Verified: 2026-10-12
 
 | Item | Version | Source |
 | --- | --- | --- |
 | Node.js | 24.x Active LTS "Krypton" (26.x is Current, not LTS yet) | https://nodejs.org/en/about/previous-releases |
 | TypeScript | 6.0.3 pinned (`~6.0`); 7.0.2 is latest but see note | https://www.typescriptlang.org/tsconfig |
-| ESLint | 10.11 (flat config only; `.eslintrc*` removed) | https://eslint.org/docs/latest/use/configure/ |
-| typescript-eslint | 8.70 (peer: `typescript >=4.8.4 <6.1.0`) | https://typescript-eslint.io |
+| ESLint | 10.12 (flat config only; `.eslintrc*` removed) | https://eslint.org/docs/latest/use/configure/ |
+| typescript-eslint | 8.71 (peer: `typescript >=4.8.4 <6.1.0`) | https://typescript-eslint.io |
 | Prettier | 3.9 | https://prettier.io/docs/ |
-| Next.js | 16.3 (App Router) | https://nextjs.org/docs/app |
+| Next.js | 16.4 (App Router) | https://nextjs.org/docs/app |
 | Tailwind CSS | 4.3 (CSS-first configuration) | https://tailwindcss.com/docs |
 | Vitest | 5.0 | https://vitest.dev |
 
 > **TypeScript 7 note**: TS 7 (native compiler) is the npm `latest`, but typescript-eslint
-> 8.70 only supports `typescript <6.1.0`. Pin `typescript@~6.0` in any project that uses
+> 8.71 only supports `typescript <6.1.0`. Pin `typescript@~6.0` in any project that uses
 > type-aware ESLint or Next.js. Move to TS 7 only after typescript-eslint's peer range
 > includes it. TS 6+ already defaults to `strict: true` and `module: esnext`; still set them
 > explicitly so intent survives default changes.

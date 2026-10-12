@@ -1,10 +1,10 @@
 # Rust Standards
 
-Verified: 2026-09-24
+Verified: 2026-10-12
 
 | Item | Version | Source |
 | --- | --- | --- |
-| Rust (stable) | 1.98.1, edition 2024 | https://doc.rust-lang.org/edition-guide/rust-2024/ |
+| Rust (stable) | 1.99.0, edition 2024 | https://doc.rust-lang.org/edition-guide/rust-2024/ |
 | rustfmt | bundled with the toolchain | https://rust-lang.github.io/rustfmt/ |
 | clippy | bundled with the toolchain | https://rust-lang.github.io/rust-clippy/stable/ |
 | Cargo `[lints]` table | stable since 1.74 | https://doc.rust-lang.org/cargo/reference/manifest.html#the-lints-section |
@@ -18,7 +18,7 @@ Verified: 2026-09-24
 
 ```toml
 [toolchain]
-channel = "1.98"
+channel = "1.99"
 components = ["rustfmt", "clippy"]
 ```
 
@@ -30,7 +30,7 @@ components = ["rustfmt", "clippy"]
 ```toml
 [package]
 edition = "2024"
-rust-version = "1.98"
+rust-version = "1.99"
 
 [lints.rust]
 unsafe_code = "forbid"

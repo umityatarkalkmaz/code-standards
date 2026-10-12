@@ -1,6 +1,22 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/session-start.sh"
+            ],
+            "timeout": 900,
+            "statusMessage": "Installing project dependencies"
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Edit|Write",
@@ -8,7 +24,9 @@
           {
             "type": "command",
             "command": "bash",
-            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/check-file.sh"],
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/check-file.sh"
+            ],
             "timeout": 120,
             "statusMessage": "Checking code standards"
           }
