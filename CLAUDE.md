@@ -38,6 +38,14 @@
 
 - If code, requirements or instructions are wrong, incomplete or contradictory, say so clearly with the reason. Do not silently comply or soften the correction. Prefer accuracy over agreement.
 
+## Response Format
+
+- When a task is done, write a summary of at most 5 lines: what changed, which files, and anything left open.
+- Do not narrate changes step by step; the diff is already visible.
+- Do not add suggestions, alternatives or "next steps" lists unless asked.
+- Ask questions only when a decision is required, and put the question at the very start of the response.
+- Never shorten errors or risks: state them clearly, with the reason.
+
 ## Project-Specific Notes
 
 <!--
