@@ -68,65 +68,28 @@ testpaths = ["tests"]
 addopts = ["--strict-markers", "--strict-config"]
 ```
 
-- Commands: `uv run ruff format`, `uv run ruff check`, `uv run mypy src`, `uv run pytest`.
-- Commit `uv.lock`.
-
 ## Project Layout
 
-```text
-pyproject.toml
-uv.lock
-.python-version
-src/
-  project_name/
-    __init__.py
-    __main__.py      # optional CLI entry
-    py.typed         # if the package is typed and published
-tests/
-  test_<module>.py
-```
-
-- `src/` layout prevents importing the working tree by accident.
+- `src/` layout (`src/<project_name>/`), tests in `tests/`.
 - Entry points via `[project.scripts]`, not ad-hoc scripts on `PATH`.
 
 ## Naming
 
-- PEP 8: `snake_case` for functions, variables, modules; `PascalCase` for classes;
-  `UPPER_SNAKE_CASE` for constants; `_leading_underscore` for internal names.
-- Functions are Action-Object: `fetch_user`, `validate_input`, `parse_config`.
-- Type hints on every function signature and public attribute; use built-in generics
-  (`list[str]`, `dict[str, int]`), `X | None`, `typing.Self`, `type` aliases (`type UserId = int`).
-- Avoid `Any`; prefer `Protocol`, `TypedDict`, `dataclass(frozen=True, slots=True)`.
+No rules beyond the core rules.
 
 ## Security Specifics
 
-- **Validation**: parse external data into typed models (`pydantic`, `attrs` + validators,
-  or dataclasses with explicit checks) at the boundary.
-- **SQL**: DB-API parameters (`cursor.execute("... WHERE id = %s", (user_id,))`) or an ORM;
-  never f-strings or `%` formatting into SQL.
-- **Shell**: `subprocess.run([...], shell=False, check=True)`; never `os.system` or
-  `shell=True` with input.
-- **Paths**: `(root / name).resolve()` then `resolved.is_relative_to(root.resolve())`.
-- **Deserialization**: never `pickle`/`marshal`/`shelve` untrusted data; `yaml.safe_load` only;
-  `json` for interchange.
-- **Code execution**: never `eval`/`exec` on input.
-- **Templates**: Jinja2 with `autoescape=True` (or the framework default).
-- **Randomness**: `secrets` module for tokens, never `random`.
-- **Secrets**: `os.environ[...]` (or `pydantic-settings`) validated at startup; never log them.
-- **HTTP**: always set timeouts on requests (`httpx`/`requests`), verify TLS (default on).
+- Parse external data into typed models (`pydantic`, or `attrs` with validators) at the
+  boundary; settings via `pydantic-settings`, validated at startup.
+- SQL via DB-API parameters (`cursor.execute("... WHERE id = %s", (user_id,))`) or an ORM.
+- Paths: `(root / name).resolve()`, then `resolved.is_relative_to(root.resolve())`.
 
 ## Testing
 
-- pytest; files `tests/test_<module>.py`, functions `test_<behavior>`:
-  `test_rejects_expired_token`.
-- Fixtures over setup classes; `pytest.mark.parametrize` for tables.
-- No network in unit tests; mock at the boundary.
+No rules beyond the core rules.
 
 ## Checklist
 
-- [ ] Work inside the project `.venv` (uv); no global/system installs.
-- [ ] `uv run ruff format --check` and `uv run ruff check` clean.
-- [ ] `uv run mypy src` passes in strict mode; all signatures annotated.
+- [ ] `uv run mypy src` passes in strict mode.
 - [ ] `uv run pytest` passes.
-- [ ] No string-built SQL, no `shell=True`, no `pickle`/`eval` on input, paths confined to root.
-- [ ] `pyproject.toml` is the only config; `uv.lock` committed; new env vars in `.env.example`.
+- [ ] `pyproject.toml` is the only config file.

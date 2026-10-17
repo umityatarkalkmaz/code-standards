@@ -14,11 +14,9 @@ official formatter/linter defaults and tell the user about the gap.
 
 1. **Detect the language** of the file you are about to touch using the routing table.
 2. **Read the matching reference once per session**, before the first write in that language.
-3. **Apply the rules while writing.** Do not write first and fix later.
-4. **Make file changes with Edit/Write**, never with Bash (`sed`, heredocs, `echo >`), so the
+3. **Make file changes with Edit/Write**, never with Bash (`sed`, heredocs, `echo >`), so the
    PostToolUse hook can format and lint the file.
-5. **Act on hook feedback.** Lint findings come back to you; fix them before moving on.
-6. **Run the reference Checklist** before declaring the task done.
+4. **Run the reference Checklist** before declaring the task done.
 
 ## Routing Table
 
@@ -56,18 +54,12 @@ official formatter/linter defaults and tell the user about the gap.
 
 ### Naming
 
-- English identifiers only.
 - Functions and methods are **Action-Object**: `fetchUser`, `validateInput`, `parse_config`,
   `ParseHeader`. Use the language's casing convention.
-- Booleans read as predicates: `isValid`, `has_access`, `canRetry`.
-- No abbreviations except widely known ones (`id`, `url`, `http`, `db`).
 
 ### Code Shape
 
 - Minimal and clean: no speculative abstraction, no unused parameters, no dead code.
-- Small functions with one responsibility; early returns over deep nesting.
-- Comments explain *why*, not *what*.
-- Every code block in chat or docs is language-tagged.
 
 ### Language of Code and Strings
 
@@ -89,18 +81,13 @@ official formatter/linter defaults and tell the user about the gap.
 - Install dependencies project-scoped (`node_modules`, `.venv`, `vendor`, Cargo/Go module
   cache per project). Never install globally unless it is a genuine system-wide requirement,
   and then say so explicitly.
-- Commit lockfiles (`package-lock.json`, `composer.lock`, `Cargo.lock` for binaries,
-  `go.sum`, `uv.lock`).
-- Run tools from the project (`npx`, `vendor/bin/`, `.venv/bin/`, `uv run`, `cargo`, `go`).
 - Check tools with `command -v <tool>` before relying on them.
 - Never hardcode absolute home paths; derive from `$HOME`.
 
 ### Versioning
 
-- Conventional Commits: `type(scope): summary` with types `feat`, `fix`, `docs`, `style`,
-  `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`. `!` or `BREAKING CHANGE:`
-  for breaking changes.
-- Semantic Versioning. User-visible changes go under `## [Unreleased]` in `CHANGELOG.md`.
+- Conventional Commits; Semantic Versioning for releases.
+- User-visible changes go under `## [Unreleased]` in `CHANGELOG.md`.
 
 ## Hook Contract
 
