@@ -15,11 +15,6 @@ Verified: 2026-10-12
 ## Tooling
 
 - Every tool is a `require-dev` Composer dependency, run via `vendor/bin/`. No global installs.
-
-```bash
-composer require --dev friendsofphp/php-cs-fixer phpstan/phpstan phpunit/phpunit
-```
-
 - **Formatter**: PHP-CS-Fixer with PER-CS. `.php-cs-fixer.dist.php` at the project root:
 
 ```php
@@ -70,12 +65,7 @@ parameters:
   Every listed path must exist, or a full `phpstan analyse` fails; add `tests` once the
   directory is created.
 
-- **Composer conventions**:
-  - `composer.json` declares `"require": {"php": "^8.5"}` (or the project's minimum) and
-    every used extension (`ext-pdo`, `ext-mbstring`, ...).
-  - Commit `composer.lock`. Install with `composer install`; use `composer update` only to
-    change dependencies deliberately.
-  - Define scripts so commands are uniform:
+- **Composer scripts** so commands are uniform:
 
 ```json
 {
@@ -90,77 +80,35 @@ parameters:
 
 ## Project Layout
 
-- PSR-4: one class per file, namespace maps to directory, file name equals class name.
-
-```json
-{
-    "autoload": {
-        "psr-4": { "Vendor\\Project\\": "src/" }
-    },
-    "autoload-dev": {
-        "psr-4": { "Vendor\\Project\\Tests\\": "tests/" }
-    }
-}
-```
-
-```text
-composer.json
-composer.lock
-phpstan.neon.dist
-phpunit.xml.dist
-.php-cs-fixer.dist.php
-public/        # web root: only index.php and static assets
-src/           # Vendor\Project\...
-tests/         # Vendor\Project\Tests\...
-```
-
+- PSR-4: `src/` → `Vendor\Project\`, `tests/` → `Vendor\Project\Tests\`.
 - The web server document root is `public/`, never the project root.
-- Run `composer dump-autoload` after adding namespaces; never `require` class files manually.
 
 ## Naming
 
-- PSR-1 / PER-CS: classes, interfaces, traits, enums in `PascalCase`; methods and properties
-  in `camelCase`; class constants in `UPPER_SNAKE_CASE`; enum cases MUST be `PascalCase`
-  (constants inside enums: `PascalCase` recommended).
 - Acronyms are written as words (PER-CS recommends php-src style): `XmlFormatter`,
   `HttpClient`, not `XMLFormatter`.
-- Methods are Action-Object: `fetchUser()`, `validateEmail()`, `parseHeader()`.
 - Interfaces end in `Interface` only if the project already does so; otherwise use nouns.
 - Every file starts with `<?php` then a blank line then `declare(strict_types=1);`.
-- Type every parameter, return and property. Use `readonly` properties/classes for values.
+- Use `readonly` properties/classes for values.
 
 ## Security Specifics
 
-- **SQL**: PDO or a query builder with bound parameters. Set
-  `PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION` and `PDO::ATTR_EMULATE_PREPARES => false`.
-- **Shell**: avoid shell calls. If unavoidable, `proc_open()` with an array command
-  (no shell), or `escapeshellarg()` for every argument. Never `shell_exec`/backticks with input.
-- **Paths**: `realpath()` the target, then check it starts with the allowed root plus
-  `DIRECTORY_SEPARATOR`. Reject `false` results.
-- **Output**: `htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')` or the
-  template engine's auto-escaping (Twig, Blade). Never echo raw input.
-- **Deserialization**: never `unserialize()` untrusted data; use `json_decode(..., flags:
-  JSON_THROW_ON_ERROR)`.
-- **Includes**: never `include`/`require` a path derived from input.
-- **Passwords**: `password_hash()` / `password_verify()` only.
-- **Randomness**: `random_bytes()` / `random_int()`, never `rand()`/`mt_rand()` for security.
-- **Secrets**: `getenv()` / `$_ENV` loaded from `.env` (e.g. `vlucas/phpdotenv`), never in code.
-- Disable `display_errors` in production; log instead.
+- PDO with `PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION` and
+  `PDO::ATTR_EMULATE_PREPARES => false`.
+- Process calls: `proc_open()` with an array command; otherwise `escapeshellarg()` per argument.
+- Paths: `realpath()`, then check the allowed root plus `DIRECTORY_SEPARATOR`; reject `false`.
+- Output: `htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')` or template
+  auto-escaping (Twig, Blade).
+- `json_decode(..., flags: JSON_THROW_ON_ERROR)` instead of `unserialize()`.
+- `password_hash()` / `password_verify()`; `random_bytes()` / `random_int()`.
+- Secrets via `getenv()` / `$_ENV` loaded with `vlucas/phpdotenv`.
 
 ## Testing
 
 - PHPUnit 13 with attributes (`#[Test]`, `#[DataProvider]`), not docblock annotations.
-- Test class `FooTest` in `tests/` mirrors `src/Foo`.
-- Test names describe behavior in English: `testRejectsExpiredToken`.
 - `phpunit.xml.dist` enables `failOnWarning`, `failOnRisky`, and `executionOrder="random"`.
 
 ## Checklist
 
-- [ ] `declare(strict_types=1);` in every file; all types declared.
-- [ ] Namespace and path match the PSR-4 mapping; `composer dump-autoload` clean.
-- [ ] `vendor/bin/php-cs-fixer fix --dry-run --diff` reports nothing.
-- [ ] `vendor/bin/phpstan analyse` passes at the configured level; no new baseline entries.
+- [ ] PER-CS 3.1 manual rules applied.
 - [ ] `vendor/bin/phpunit` passes.
-- [ ] No string-built SQL, no shell with input, paths checked against a root, output escaped.
-- [ ] No secrets in code; new env vars added to `.env.example`.
-- [ ] `composer.lock` committed when dependencies change.

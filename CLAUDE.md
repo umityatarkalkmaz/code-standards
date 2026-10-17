@@ -10,29 +10,9 @@
 
 - Always apply the `code-standards` skill before writing, editing or reviewing code. Its references are authoritative: do not search the web for language standards they already cover.
 - Make file changes with the Edit/Write tools so the standards hook can verify them.
-
-## Security First
-
-- Validate and normalize input at every trust boundary (HTTP, CLI args, env, files, IPC, third-party APIs).
-- Prevent injection: parameterized SQL, no shell string building (argument arrays, never `eval`), path traversal checks against a root directory, context-aware output escaping against XSS.
-- Never hardcode secrets. Read them from environment variables, document every variable in `.env.example`, keep `.env` gitignored.
-
-## Code Style
-
-- English identifiers with Action-Object naming (`fetchUser`, `validateInput`, `parse_config`), in the language's own casing.
-- Minimal, clean code: no unnecessary abstraction, boilerplate or speculative features.
+- Security first, Action-Object naming, minimal code, project-scoped dependencies, Conventional Commits and CHANGELOG: the rules live in the `code-standards` skill.
+- Test-first: write the failing test before the implementation.
 - Always use language-tagged code blocks.
-
-## Dependencies and Tooling
-
-- Install dependencies project-scoped (`node_modules`, `.venv`, `vendor`, per-project Cargo/Go modules), never globally.
-- Check tool availability with `command -v <tool>` before relying on it.
-- Never hardcode absolute home paths; derive them from `$HOME`.
-
-## Versioning
-
-- Conventional Commits for every commit; Semantic Versioning for releases.
-- Record user-visible changes under `## [Unreleased]` in `CHANGELOG.md`.
 
 ## Correctness
 
@@ -42,7 +22,7 @@
 
 - When a task is done, write a summary of at most 5 lines: what changed, which files, and anything left open.
 - Do not narrate changes step by step; the diff is already visible.
-- Do not add suggestions, alternatives or "next steps" lists unless asked.
+- Do not propose out-of-scope features or "next steps" lists unless asked. Do state risks you see and a clearly better approach, briefly.
 - Ask questions only when a decision is required, and put the question at the very start of the response.
 - Never shorten errors or risks: state them clearly, with the reason.
 
